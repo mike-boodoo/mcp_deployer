@@ -1,4 +1,4 @@
-# MCP Search-Space Deployer
+# MCP Deployer
 
 A browser-first HTML deployer/editor for named self-deployers that participate in shared MCP search spaces.
 
