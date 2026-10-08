@@ -1,0 +1,21 @@
+{
+  "name": "mcp-searchspace-deployer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "HTML editor and local deployment orchestrator for named MCP Registry search spaces.",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "mcp": "node src/mcp-http.mjs",
+    "dev": "node --watch src/server.mjs",
+    "test": "node --test",
+    "generate": "node src/generate.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.0.0"
+  }
+}

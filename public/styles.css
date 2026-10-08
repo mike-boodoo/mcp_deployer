@@ -1,0 +1,40 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #e9eef6; background: #08101d; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top right, #12263f, #08101d 46%); }
+.topbar { padding: 30px 5vw 22px; display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; border-bottom: 1px solid #203149; }
+.eyebrow { color: #78aaf7; font-size: 12px; letter-spacing: .16em; font-weight: 800; }
+h1 { margin: 7px 0 6px; font-size: clamp(28px, 4vw, 48px); }
+.subtitle { max-width: 900px; margin: 0; color: #a8b7c9; line-height: 1.5; }
+.status-pill { border: 1px solid #355178; padding: 8px 12px; border-radius: 999px; color: #aac8ff; background: #0d1a2d; white-space: nowrap; }
+.layout { width: min(1500px, 92vw); margin: 28px auto 60px; display: grid; gap: 18px; }
+.panel { background: rgba(10, 21, 36, .9); border: 1px solid #1d3048; border-radius: 18px; padding: 20px; box-shadow: 0 14px 50px rgba(0,0,0,.18); }
+.panel-head { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; margin-bottom: 16px; }
+.panel-head h2 { margin: 0; font-size: 18px; }
+.panel-head span { color: #7890aa; font-size: 12px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+label { display: grid; gap: 7px; color: #9eafc2; font-size: 12px; }
+input, select, textarea { width: 100%; border: 1px solid #29405d; background: #07101b; color: #eaf1fa; border-radius: 10px; padding: 10px 11px; font: inherit; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: #5c93db; box-shadow: 0 0 0 3px rgba(92,147,219,.14); }
+.actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 15px; }
+button { border: 1px solid #314b69; background: #0e1d31; color: #e4ecf7; padding: 9px 13px; border-radius: 9px; cursor: pointer; font-weight: 700; }
+button:hover { transform: translateY(-1px); border-color: #6087b6; }
+button.primary { background: #18385f; border-color: #3d6ea7; }
+button.danger { background: #3c2424; border-color: #844d4d; }
+.manifest { margin: 15px 0 0; max-height: 230px; overflow: auto; border: 1px solid #17283b; border-radius: 12px; padding: 13px; background: #040a12; color: #bdd0e7; }
+.editor-shell { display: grid; grid-template-columns: 55px 1fr; min-height: 440px; border: 1px solid #20354e; border-radius: 12px; overflow: hidden; background: #040a12; }
+.line-numbers { padding: 12px 8px; background: #07101a; color: #50637a; text-align: right; font: 13px/1.52 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; user-select: none; overflow: hidden; }
+#code { border: 0; border-radius: 0; resize: vertical; min-height: 440px; padding: 12px 14px; font: 13px/1.52 ui-monospace, SFMono-Regular, Consolas, monospace; tab-size: 2; }
+.editor-foot { display: flex; justify-content: space-between; margin-top: 10px; color: #7890aa; font-size: 12px; }
+.search-row { display: grid; grid-template-columns: 1fr auto; gap: 9px; }
+.peer-list { display: grid; gap: 10px; margin-top: 14px; }
+.peer { border: 1px solid #20354e; border-radius: 12px; padding: 12px; display: grid; gap: 5px; }
+.peer b { font-family: ui-monospace, monospace; }
+.peer small { color: #8ea1b8; }
+.empty { padding: 20px; color: #71879f; border: 1px dashed #263e59; border-radius: 12px; text-align: center; }
+.orchestrator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.orchestrator-grid > div { display: grid; gap: 10px; align-content: start; }
+#hostResponse, #trainingData { resize: vertical; min-height: 220px; }
+.output { margin: 14px 0 0; max-height: 360px; overflow: auto; border: 1px solid #20354e; border-radius: 12px; padding: 14px; background: #040a12; color: #bdd0e7; white-space: pre-wrap; }
+.notes p { margin: 9px 0; color: #9fb0c4; line-height: 1.55; }
+@media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } .orchestrator-grid { grid-template-columns: 1fr; } }
+@media (max-width: 650px) { .topbar { flex-direction: column; } .grid { grid-template-columns: 1fr; } .search-row { grid-template-columns: 1fr; } }

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Search-Space MCP Deployer — Standalone HTML</title>
+<style>
+:root{--bg:#0b1020;--panel:#11182b;--panel2:#0d1425;--line:#25304b;--text:#eef3ff;--muted:#9eabc8;--accent:#7aa2ff;--good:#52d69a;--warn:#f5c66a;--bad:#ff7c91}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#090d19,#0f172b 50%,#0a1020);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif} button,input,textarea,select{font:inherit} button{cursor:pointer;border:1px solid var(--line);background:#16213a;color:var(--text);padding:9px 12px;border-radius:8px}button:hover{filter:brightness(1.12)}button.primary{background:#2856c7;border-color:#4d79ee}button.good{background:#15553e;border-color:#2c9f72}button.danger{background:#552035;border-color:#9f4261}.wrap{max-width:1500px;margin:0 auto;padding:24px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:18px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--accent);font-weight:800}.top h1{font-size:30px;margin:5px 0}.top p{color:var(--muted);max-width:900px;margin:0}.status{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#10172a;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{border:1px solid var(--line);background:rgba(17,24,43,.92);border-radius:14px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,.15)}.span2{grid-column:1/-1}.head{display:flex;justify-content:space-between;gap:15px;align-items:baseline;margin-bottom:12px}.head h2{font-size:16px;margin:0}.head span{font-size:12px;color:var(--muted)}label{display:flex;flex-direction:column;gap:6px;color:#cbd5ef;font-size:12px}input,select,textarea{width:100%;background:#0a1120;border:1px solid #283556;color:var(--text);border-radius:8px;padding:9px 10px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent)}textarea{resize:vertical}.actions,.toolbar,.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.actions{margin-top:12px}.manifest,.output,.peer{margin-top:12px;background:#080d18;border:1px solid #202b44;border-radius:9px;padding:12px;white-space:pre-wrap;word-break:break-word;overflow:auto;max-height:360px}.editor-shell{position:relative;display:grid;grid-template-columns:50px 1fr;border:1px solid #283556;border-radius:9px;overflow:hidden;background:#080d18}.lines{padding:12px 8px;text-align:right;color:#53607d;background:#0a1020;user-select:none;overflow:hidden}.code{min-height:420px;border:0;border-radius:0;padding:12px;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#080d18}.foot{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:8px;color:var(--muted);font-size:12px}.peergrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.peer{margin:0;padding:11px;max-height:none}.peer b{display:block;margin-bottom:3px}.peer small{display:block;color:var(--muted)}.muted{color:var(--muted)}.notice{padding:10px 12px;border-radius:9px;background:#121c30;border:1px solid #273554;color:#bec9e3}.servicegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.service{border:1px solid var(--line);border-radius:10px;padding:11px;background:#0a1120}.service strong{display:block}.svcstate{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;font-size:11px}.svcstate.ok{background:#103d2c;color:#9de2c3}.svcstate.warn{background:#3b3015;color:#eed38c}.svcstate.bad{background:#411824;color:#ffb5c2}.debug{margin-top:12px;background:#060a12;border:1px solid #202b44;border-radius:9px;padding:12px;max-height:300px;overflow:auto;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap}.debug .dbg-info{color:#a7b8db}.debug .dbg-ok{color:#8fe1ba}.debug .dbg-warn{color:#e7cb8b}.debug .dbg-error{color:#ffabb8}.warning{border-color:#6e5722;background:#201a0d;color:#ead39a}.success{border-color:#225840;background:#0d241b;color:#a9e7ca}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:1050px){.layout,.grid,.split{grid-template-columns:1fr}.peergrid{grid-template-columns:1fr 1fr}.span2{grid-column:auto}}@media(max-width:620px){.wrap{padding:12px}.peergrid{grid-template-columns:1fr}.top{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">MCP REGISTRY · STANDALONE HTML</div>
+      <h1>Search-Space MCP Deployer</h1>
+      <p>The editor, identity, local deployment record, peer discovery, orchestration, and exports work in the browser. Authenticated MCP Registry login and publishing use the same-origin app backend so GitHub OAuth is not attempted from a file:// page.</p>
+    </div>
+    <div class="status" id="status">Standalone / ready</div>
+  </header>
+
+  <div class="layout">
+    <section class="panel span2">
+      <div class="head"><h2>1. Identity + search space</h2><span>Visible to the deployed community</span></div>
+      <div class="grid">
+        <label>Registry name<input id="name" value="io.github.example/search-space-deployer"></label>
+        <label>Deployer name<input id="deployer" value="focus-weaver"></label>
+        <label>Search space<input id="space" value="public-focus"></label>
+        <label>Focus<input id="focus" value="response-orchestration"></label>
+        <label>Version<input id="version" value="0.1.0"></label>
+        <label>Visibility<select id="visibility"><option>public</option><option>team</option><option>private-intent</option></select></label>
+        <label>Registry API<input id="registry" value="https://registry.modelcontextprotocol.io/v0.1/servers"></label>
+        <label>NPM package<input id="packageName" value="" placeholder="derived from your npm account after login"></label>
+        <label>NPM publish token (session only)<input id="npmToken" type="password" autocomplete="off" placeholder="Used only while deploying"></label>
+      </div>
+      <div class="actions">
+        <button class="primary" onclick="saveDeployment()">Save local deployment</button>
+        <button id="registryLoginBtn" class="primary" onclick="connectRegistry()">Login to MCP Registry</button>
+        <button id="npmConnectBtn" onclick="connectNpm()">Connect npm</button>
+        <button class="good" onclick="deployGenericConnector()">Deploy generic connector to MCP Registry</button>
+        <button onclick="checkServices()">Check service connections</button>
+        <button onclick="downloadManifest()">Export server.json</button>
+        <button class="good" onclick="exportHtml()">Export portable HTML</button>
+        <button onclick="copyInvocation()">Copy chatbot invocation</button>
+      </div>
+      <div class="servicegrid">
+        <div class="service"><strong>MCP Registry</strong><span id="registryState" class="svcstate warn">Checking…</span><div class="muted" id="registryDetail">Authentication not checked yet.</div></div>
+        <div class="service"><strong>GitHub OAuth</strong><span id="githubState" class="svcstate warn">Checking…</span><div class="muted" id="githubDetail">Authentication starts from the Registry login button.</div></div>
+        <div class="service"><strong>npm</strong><span id="npmState" class="svcstate warn">Not connected</span><div class="muted" id="npmDetail">A publish-capable npm credential is required to publish generated packages.</div></div>
+      </div>
+      <div class="notice success" style="margin-top:12px">Deploy now creates a real MCP package from the code in this editor, publishes that package to npm, obtains a short-lived MCP Registry JWT through GitHub authentication, and then publishes the package-backed <code>server.json</code>. No pre-existing MCP endpoint is required. Registry and npm credentials are session-only and are never written to localStorage.</div>
+      <pre class="manifest" id="manifest">{}</pre>
+      <pre class="manifest" id="registryResponse">Registry response will appear here after a Registry request.</pre>
+      <div class="head" style="margin-top:14px"><h2>Connection debug log</h2><span>Secrets and tokens are redacted</span></div>
+      <div id="debugLog" class="debug">No connection events yet.</div>
+    </section>
+
+    <section class="panel">
+      <div class="head"><h2>2. Connector editor</h2><span>The deployer identity stays in the code</span></div>
+      <div class="editor-shell">
+        <div class="lines" id="lines">1</div>
+        <textarea class="code" id="code" spellcheck="false">// MCP_DEPLOYER_NAME: focus-weaver
+// MCP_SEARCH_SPACE: public-focus
+// MCP_FOCUS: response-orchestration
+// MCP_REGISTRY_NAME: io.github.example/search-space-deployer
+// MCP_STAGE: post-response
+
+export default {
+  name: "focus-weaver",
+  searchSpace: "public-focus",
+  focus: "response-orchestration",
+  stage: "post-response",
+
+  // The host chatbot can identify this deployer by name.
+  // Other deployers in the same searchSpace are peers.
+  orchestrate(response) {
+    return response
+      .replace(/sk-[A-Za-z0-9_-]{8,}/g, "[secret removed]")
+      .replace(/^SYSTEM:.*$/gim, "")
+      .replace(/^INTERNAL:.*$/gim, "")
+      .trim();
+  }
+};</textarea>
+      </div>
+      <div class="foot"><span id="directive">Parsed from visible directives.</span><span id="linesCount"></span></div>
+    </section>
+
+    <section class="panel">
+      <div class="head"><h2>3. MCP Registry peer discovery</h2><span>Shared search-space + focus</span></div>
+      <div class="toolbar">
+        <input id="peerFocus" placeholder="optional focus filter" style="flex:1">
+        <button class="primary" onclick="findPeers()">Find peers</button>
+        <button onclick="loadSavedPeers()">Load saved peers</button>
+      </div>
+      <div id="peers" class="peergrid" style="margin-top:12px"><div class="notice">No peer search run yet.</div></div>
+    </section>
+
+    <section class="panel span2">
+      <div class="head"><h2>4. Post-response / pre-training orchestrator</h2><span>One policy, two positions in the pipeline</span></div>
+      <div class="split">
+        <div>
+          <label>Host chatbot response<textarea id="host" rows="12">SYSTEM: hidden routing data
+Here is the answer. It includes sk-1234567890abcdef as a secret and an INTERNAL: policy marker.
+Focus on the concrete implementation architecture and deployment model.</textarea></label>
+          <div class="actions"><button class="primary" onclick="runPost()">Run post-response</button><button onclick="copyOutput()">Copy output</button></div>
+        </div>
+        <div>
+          <label>Training JSON / JSONL<textarea id="training" rows="12">[{"prompt":"What is MCP?","completion":"SYSTEM: hidden\nMCP is a protocol for tool/context interoperability."},{"prompt":"What is a search space?","completion":"A search space groups deployers that share a focus."}]</textarea></label>
+          <div class="actions"><button onclick="runPre()">Run pre-training transform</button></div>
+        </div>
+      </div>
+      <pre class="output" id="output">Output appears here.</pre>
+    </section>
+
+    <section class="panel span2">
+      <div class="head"><h2>5. Deployable artifacts</h2><span>No-command workflow</span></div>
+      <div class="row">
+        <button onclick="downloadFile('README-FIRST.txt', readmeText())">Download README-FIRST.txt</button>
+        <button onclick="downloadFile('search-space-config.json', JSON.stringify(config(),null,2))">Download config JSON</button>
+        <button onclick="window.print()">Print / Save PDF</button>
+      </div>
+      <p class="muted" style="margin-bottom:0">The HTML is the UI artifact. For Registry login/publishing, serve it from the included app backend (or deploy that backend behind the HTML origin); GitHub OAuth is intentionally server-side because GitHub blocks the direct browser token exchange. LocalStorage keeps only non-secret deployment configuration.</p>
+    </section>
+  </div>
+</div>
+<script src="./site-config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const CONFIG_KEY='mcp-searchspace-deployer.v2';
+
+const URL_SERVICE_PARAM='service';
+const configuredServiceUrl = (window.MCP_DEPLOYER_SERVICE_URL || new URLSearchParams(window.location.search).get(URL_SERVICE_PARAM) || '').trim().replace(/\/$/, '');
+if (configuredServiceUrl) window.MCP_DEPLOYER_SERVICE_URL = configuredServiceUrl;
+
+function getDirectives(){
+  const t=$('code').value;
+  const pick=(k)=>{const r=new RegExp('^\\s*//\\s*'+k+'\\s*:\\s*(.+)$','im').exec(t);return r?r[1].trim():''};
+  return {deployer:pick('MCP_DEPLOYER_NAME'),space:pick('MCP_SEARCH_SPACE'),focus:pick('MCP_FOCUS'),name:pick('MCP_REGISTRY_NAME'),stage:pick('MCP_STAGE')};
+}
+function syncFromInputs(){
+  const d=getDirectives();
+  if(d.name) $('name').value=d.name;
+  if(d.deployer) $('deployer').value=d.deployer;
+  if(d.space) $('space').value=d.space;
+  if(d.focus) $('focus').value=d.focus;
+  $('directive').textContent=`Parsed deployer ${d.deployer||'(unnamed)'} · search space ${d.space||'(none)'}`;
+}
+function config(){return {registryName:$('name').value.trim(),deployer:$('deployer').value.trim(),searchSpace:$('space').value.trim(),focus:$('focus').value.trim(),version:$('version').value.trim(),visibility:$('visibility').value,registry:$('registry').value.trim(),packageName:$('packageName').value.trim(),code:$('code').value}};
+function manifest(pkg){const c=config();const p=pkg||c.packageName||'@unknown/mcp-connector';return {$schema:'https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json',name:c.registryName,title:c.deployer,description:`Named self-deployer for ${c.searchSpace} focused on ${c.focus}.`,version:c.version,websiteUrl:`https://www.npmjs.com/package/${encodeURIComponent(p).replace('%2F','/')}`,packages:[{registryType:'npm',registryBaseUrl:'https://registry.npmjs.org',identifier:p,version:c.version,transport:{type:'stdio'}}],_meta:{'io.modelcontextprotocol.registry/publisher-provided':{deployer:c.deployer,searchSpace:c.searchSpace,focus:c.focus,visibility:c.visibility,package:p}}};}
+function renderManifest(){$('manifest').textContent=JSON.stringify(manifest(),null,2)}
+function saveDeployment(){localStorage.setItem(CONFIG_KEY,JSON.stringify(config()));renderManifest();$('status').textContent='Saved locally';}
+function load(){try{const c=JSON.parse(localStorage.getItem(CONFIG_KEY)||'null');if(c){for(const k of ['name','deployer','space','focus','version','visibility','registry','packageName']) if(c[k]!=null){const map={name:'name',deployer:'deployer',space:'space',focus:'focus',version:'version',visibility:'visibility',packageName:'packageName',registry:'registry'};$(map[k]).value=c[k]}if(c.code)$('code').value=c.code;if(c.packageName)$('packageName').value=c.packageName;}}catch{}renderManifest();updateLines();syncFromInputs();}
+function updateLines(){const n=$('code').value.split('\n').length;$('lines').textContent=Array.from({length:n},(_,i)=>i+1).join('\n');$('linesCount').textContent=n+' lines';}
+function downloadFile(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function downloadManifest(){downloadFile('server.json',JSON.stringify(manifest(),null,2));$('status').textContent='server.json exported';}
+function exportHtml(){downloadFile('mcp-searchspace-deployer.html','<!doctype html>\n'+document.documentElement.outerHTML);$('status').textContent='Portable HTML exported';}
+function copyInvocation(){const c=config();const s=`Ask the host chatbot to deploy or route through the MCP deployer "${c.deployer}" in search space "${c.searchSpace}" with focus "${c.focus}". The deployer identity is declared in its visible code.`;navigator.clipboard?.writeText(s);$('output').textContent=s}
+function clean(text){return text.replace(/sk-[A-Za-z0-9_-]{8,}/g,'[secret removed]').replace(/^SYSTEM:.*$/gim,'').replace(/^INTERNAL:.*$/gim,'').replace(/^\s*$/gm,'').trim()}
+function runPost(){const o=clean($('host').value);$('output').textContent=o;saveDeployment()}
+function runPre(){try{const x=JSON.parse($('training').value);const y=Array.isArray(x)?x.map(r=>({...r,completion:clean(String(r.completion??''))})):clean(String(x));$('output').textContent=JSON.stringify(y,null,2);saveDeployment()}catch(e){$('output').textContent='Invalid JSON: '+e.message}}
+function serviceBase(){
+  const configured = (window.MCP_DEPLOYER_SERVICE_URL || '').trim().replace(/\/$/, '');
+  if (configured) return configured;
+  if (location.protocol === 'file:') return '';
+  const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
+  if (localHosts.has(location.hostname)) return window.location.origin;
+  return '';
+}
+const DEBUG_MAX=250;
+const debugEntries=[];
+function redact(value){return String(value??'').replace(/(Bearer\s+)[A-Za-z0-9._~-]+/gi,'$1[REDACTED]').replace(/(token|jwt|device_code|access_token|github_token|npmToken|password)\s*[:=]\s*[^,\s]+/gi,'$1=[REDACTED]')}
+function debugLog(level,event,data={}){const ts=new Date().toISOString();const entry={ts,level,event,...data};delete entry.token;delete entry.accessToken;delete entry.registryToken;delete entry.npmToken;delete entry.githubToken;debugEntries.push(entry);while(debugEntries.length>DEBUG_MAX)debugEntries.shift();const el=$('debugLog');if(el){el.textContent=debugEntries.map(x=>`[${x.ts}] ${String(x.level).toUpperCase()} ${x.event}${Object.keys(x).filter(k=>!['ts','level','event'].includes(k)).length?'\n  '+redact(JSON.stringify(Object.fromEntries(Object.entries(x).filter(([k])=>!['ts','level','event'].includes(k))),null,2)) : ''}`).join('\n\n');el.scrollTop=el.scrollHeight;}console.debug('[MCP-DEPLOYER]',entry)}
+function setService(id,state,text){const el=$(id);if(!el)return;el.textContent=state;el.className='svcstate '+(state==='Connected'||state==='Healthy'||state==='Ready'?'ok':state==='Error'?'bad':'warn');const detail=$(id.replace('State','Detail'));if(detail)detail.textContent=text}
+function showHttpDebug(service,response,payload){debugLog(response.ok?'info':'error',`${service} HTTP ${response.status}`,{statusText:response.statusText,requestId:response.headers?.get?.('x-request-id')||null,body:payload})}
+function clearRegistryResponse(){const el=$('registryResponse');if(el)el.textContent='';}
+function showRegistryResponse(response,body){const text=`MCP Registry response: HTTP ${response.status} ${response.statusText||''}\n\n${JSON.stringify(body,null,2)}`;const el=$('registryResponse');if(el){el.textContent=text;el.className='manifest '+(response.ok?'success':'warning');}debugLog(response.ok?'ok':'error','MCP Registry response',{status:response.status,statusText:response.statusText,requestId:response.headers?.get?.('x-request-id')||null,body});}
+async function checkServices(){
+  debugLog('info','connection preflight started',{pageProtocol:location.protocol,serviceBase:serviceBase()||'(same origin)' });
+  const base=serviceBase();
+  if(!base){
+    const configuredHint = location.protocol === 'file:' ? 'Serve this HTML through the included app backend or set window.MCP_DEPLOYER_SERVICE_URL (or ?service=...) to point at the backend.' : 'Set window.MCP_DEPLOYER_SERVICE_URL or add ?service=https://your-backend.example to this page.';
+    setService('registryState','Error',`No app backend is available. ${configuredHint}`);
+    setService('githubState','Error','GitHub OAuth requires the app backend.');
+    debugLog('error','service backend unavailable',{reason:'no backend origin configured',pageOrigin:location.origin,configuredService:window.MCP_DEPLOYER_SERVICE_URL||null,searchParam:new URLSearchParams(window.location.search).get('service')||null});
+    return false;
+  }
+  try{
+    const r=await fetch(base+'/api/registryHealth',{headers:{accept:'application/json'},cache:'no-store'});const d=await r.json().catch(()=>({}));showHttpDebug('Registry health',r,d);
+    if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);setService('registryState','Healthy',`API reachable · ${d.url||'official Registry'}`);setService('githubState',d.githubClientId?'Ready':'Error',d.githubClientId?'GitHub OAuth client is advertised by the Registry.':'Registry did not advertise a GitHub OAuth client id.');
+    return true;
+  }catch(e){setService('registryState','Error',e.message);setService('githubState','Error','Cannot preflight GitHub OAuth until the Registry backend is reachable.');debugLog('error','Registry preflight failed',{message:e.message,name:e.name,cause:e.cause?.message||e.cause?.code||null});return false;}
+}
+async function connectNpm(){
+  debugLog('info','npm connect clicked');
+  const tok=$('npmToken').value.trim();
+  if(!tok){setService('npmState','Login required','Create a granular npm access token, then paste it here.');debugLog('warn','npm credential missing',{action:'opening npm token creation page'});window.open('https://www.npmjs.com/settings/~/tokens/granular-access-tokens/new','_blank','noopener');$('npmToken').focus();return;}
+  const base=serviceBase();
+  if(!base){setService('npmState','Error','npm verification requires the app backend.');debugLog('error','npm verification unavailable',{reason:'no app backend',protocol:location.protocol});return;}
+  try{$('npmConnectBtn').disabled=true;$('npmConnectBtn').textContent='Checking npm…';const r=await fetch(base+'/api/npmWhoami',{method:'POST',headers:{accept:'application/json','content-type':'application/json'},body:JSON.stringify({token:tok})});const d=await r.json().catch(()=>({}));showHttpDebug('npm whoami',r,d);if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);setService('npmState','Connected',`Authenticated as @${d.username}`);$('packageName').value=$('packageName').value.trim()||`@${d.username}/mcp-focus-weaver`;debugLog('ok','npm authenticated',{username:d.username});}catch(e){setService('npmState','Error',e.message);debugLog('error','npm authentication failed',{message:e.message,name:e.name,cause:e.cause?.message||e.cause?.code||null});$('status').textContent='npm login failed';}finally{$('npmConnectBtn').disabled=false;$('npmConnectBtn').textContent='Connect npm';}
+}
+async function connectRegistry(){
+  const btn=$('registryLoginBtn');
+  if(!btn){debugLog('error','Registry login UI missing',{elementId:'registryLoginBtn'});return;}
+  debugLog('info','Registry login clicked');
+  if(window.mcpRegistrySession){debugLog('info','Registry login session already exists',{sessionId:window.mcpRegistrySession});$('status').textContent='MCP Registry login already started';return;}
+  const base=serviceBase();
+  if(!base){setService('registryState','Error','Serve this page through the included backend for authenticated login.');$('status').textContent='Registry backend unavailable';debugLog('error','Registry login cannot start',{protocol:location.protocol,reason:'authenticated OAuth cannot be completed from file://'});return;}
+  btn.disabled=true;btn.textContent='Starting MCP Registry login…';$('status').textContent='Connecting to Registry…';clearRegistryResponse();
+  try{
+    const r=await fetch(base+'/api/authGithubStart',{method:'POST',headers:{accept:'application/json'},cache:'no-store'});const d=await r.json().catch(()=>({}));showHttpDebug('Registry auth start',r,d);if(!r.ok)throw new Error(d.error||`Login start failed: HTTP ${r.status}`);
+    window.mcpRegistrySession=d.sessionId;setService('registryState','Login pending',`GitHub authorization started · code ${d.userCode||'provided'}`);setService('githubState','Login pending','Complete the GitHub authorization window.');
+    $('output').textContent=`GitHub authorization required.\n\nOpen: ${d.verificationUriComplete||d.verificationUri}\nUser code: ${d.userCode}\n\nThe app backend is polling GitHub and will exchange the result for a short-lived MCP Registry credential. No GitHub access token is returned to this page.`;
+    if(d.verificationUriComplete)window.open(d.verificationUriComplete,'_blank','noopener');else if(d.verificationUri)window.open(d.verificationUri,'_blank','noopener');
+    debugLog('info','GitHub authorization window opened',{verificationUri:d.verificationUri,userCode:d.userCode});pollRegistryLogin(base,d.sessionId);
+  }catch(e){btn.disabled=false;btn.textContent='Login to MCP Registry';setService('registryState','Error',e.message);setService('githubState','Error','GitHub OAuth did not start.');$('status').textContent='Registry login failed';$('output').textContent=`${e.message}\n\nSee Connection debug log for the HTTP response and service details.`;debugLog('error','Registry login start failed',{message:e.message});delete window.mcpRegistrySession;}
+}
+async function pollRegistryLogin(base,sessionId){
+  try{while(true){await new Promise(r=>setTimeout(r,2500));debugLog('info','polling Registry login',{sessionId});const r=await fetch(`${base}/api/authGithubStatus?sessionId=${encodeURIComponent(sessionId)}`,{headers:{accept:'application/json'},cache:'no-store'});const d=await r.json().catch(()=>({}));showHttpDebug('Registry auth status',r,{state:d.state,githubLogin:d.githubLogin||null,error:d.error||null});if(!r.ok)throw new Error(d.error||`Login status failed: HTTP ${r.status}`);if(d.state==='authenticated'){window.mcpRegistryAuthenticated=true;setService('registryState','Connected',`Authenticated${d.githubLogin?` · @${d.githubLogin}`:''}`);setService('githubState','Connected',d.githubLogin?`GitHub @${d.githubLogin}`:'GitHub authorized');$('status').textContent=`MCP Registry connected${d.githubLogin?` · @${d.githubLogin}`:''}`;$('registryLoginBtn').textContent='✓ MCP Registry connected';$('registryLoginBtn').classList.remove('primary');$('registryLoginBtn').classList.add('good');$('registryLoginBtn').disabled=false;$('output').textContent=`MCP Registry login successful.\n\nGitHub: ${d.githubLogin?`@${d.githubLogin}`:'authenticated'}\nRegistry credential: held server-side only.\n\nYou can now deploy the generic connector.`;debugLog('ok','Registry authentication complete',{githubLogin:d.githubLogin||null});renderManifest();return;}if(d.state==='error')throw new Error(d.error||'Registry login failed');}}
+  catch(e){$('registryLoginBtn').disabled=false;$('registryLoginBtn').textContent='Login to MCP Registry';setService('registryState','Error',e.message);setService('githubState','Error','GitHub authorization or Registry token exchange failed.');$('status').textContent='Registry login failed';$('output').textContent=`${e.message}\n\nSee Connection debug log for the HTTP response and backend trace.`;debugLog('error','Registry login polling failed',{message:e.message});delete window.mcpRegistrySession;}
+}
+
+function randomId(n=24){const a=new Uint8Array(n);crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function octal(value,length){const s=Math.floor(value).toString(8).padStart(length-1,'0');return s+'\0'}
+function tarHeader(name,size,mtime){const b=new Uint8Array(512);const w=(off,len,val)=>{const bytes=new TextEncoder().encode(val);b.set(bytes.slice(0,len),off)};w(0,100,name);w(100,8,'0000644\0');w(108,8,'0000000\0');w(116,8,'0000000\0');w(124,12,octal(size,12));w(136,12,octal(mtime,12));for(let i=148;i<156;i++)b[i]=32;w(156,1,'0');w(257,6,'ustar\0');w(263,2,'00');w(265,32,'connector');w(297,32,'connector');let sum=0;for(const x of b)sum+=x;w(148,8,octal(sum,8)+' ');return b}
+function buildTar(files){const enc=new TextEncoder();let parts=[];const now=Math.floor(Date.now()/1000);for(const [name,text] of files){const data=typeof text==='string'?enc.encode(text):text;parts.push(tarHeader(name,data.length,now),data,new Uint8Array((512-(data.length%512))%512))}parts.push(new Uint8Array(1024));let total=parts.reduce((n,x)=>n+x.length,0),out=new Uint8Array(total),o=0;for(const x of parts){out.set(x,o);o+=x.length}return out}
+async function gzip(data){const cs=new CompressionStream('gzip');const w=cs.writable.getWriter();w.write(data);w.close();return new Uint8Array(await new Response(cs.readable).arrayBuffer())}
+function b64(bytes){let s='';const step=0x8000;for(let i=0;i<bytes.length;i+=step)s+=String.fromCharCode(...bytes.subarray(i,i+step));return btoa(s)}
+function hex(bytes){return [...new Uint8Array(bytes)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function publishNpmPackage(pkgName,version,packageJson,connectorCode,readme){
+  const tok=$('npmToken').value.trim();if(!tok){debugLog('error','npm publish blocked',{reason:'missing credential'});throw new Error('npm login required: click Connect npm to authenticate.');} debugLog('info','npm publish starting',{package:pkgName,version});
+  debugLog('info','npm whoami request');const who=await fetch('https://registry.npmjs.org/-/whoami',{headers:{Authorization:'Bearer '+tok,Accept:'application/json'}});const wd=await who.json();if(!who.ok||!wd.username){const detail=wd.error||`npm whoami failed: HTTP ${who.status}`;debugLog('error','npm whoami failed',{status:who.status,detail});throw new Error(detail)} debugLog('ok','npm identity verified',{username:wd.username});
+  const expectedPrefix='@'+wd.username+'/';
+  if(!pkgName)pkgName=expectedPrefix+'mcp-focus-weaver';
+  if(!pkgName.startsWith(expectedPrefix))throw new Error(`NPM package must be scoped to your npm account: ${expectedPrefix}...`);
+  const files=[['package/package.json',JSON.stringify(packageJson,null,2)],['package/server.mjs',connectorRuntime()],['package/connector.mjs',connectorCode],['package/README.md',readme]];
+  const tgz=await gzip(buildTar(files));
+  const filename=pkgName.split('/').pop()+'-'+version+'.tgz';
+  const sha1=hex(await crypto.subtle.digest('SHA-1',tgz));
+  const sha512=b64(new Uint8Array(await crypto.subtle.digest('SHA-512',tgz)));
+  const integrity='sha512-'+sha512;
+  const dist={tarball:`https://registry.npmjs.org/${encodeURIComponent(pkgName).replace('%2F','/')}/-/${filename}`,shasum:sha1,integrity,fileCount:files.length,unpackedSize:files.reduce((n,[,t])=>n+new TextEncoder().encode(t).length,0)};
+  const versionDoc={...packageJson,dist};
+  const body={_id:pkgName,name:pkgName,'dist-tags':{latest:version},versions:{[version]:versionDoc},_attachments:{[filename]:{content_type:'application/octet-stream',data:b64(tgz),length:tgz.length}},readme};
+  const r=await fetch('https://registry.npmjs.org/'+encodeURIComponent(pkgName),{method:'PUT',headers:{Authorization:'Bearer '+tok,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)});
+  const txt=await r.text();let d;try{d=JSON.parse(txt)}catch{d={raw:txt}};if(!r.ok){const detail=d.error||d.message||`npm publish failed: HTTP ${r.status}`;debugLog('error','npm publish failed',{status:r.status,detail,body:d});throw new Error(detail)} debugLog('ok','npm package published',{package:pkgName,version});
+  return {username:wd.username,package:pkgName,version,tarball:dist.tarball};
+}
+function connectorRuntime(){return `import { createInterface } from 'node:readline';
+import connector from './connector.mjs';
+const serverInfo={name:connector.name||'generic-mcp-connector',version:connector.version||'0.1.0'};
+const tools=[{name:'describe_deployer',description:'Describe this named self-deployer and its search space.',inputSchema:{type:'object',properties:{}}},{name:'orchestrate_response',description:'Run the deployed connector policy against a host response.',inputSchema:{type:'object',properties:{response:{type:'string'}},required:['response']}}];
+function reply(id,result){process.stdout.write(JSON.stringify({jsonrpc:'2.0',id,result})+'\\n')}
+async function handle(m){if(m.method==='initialize')return reply(m.id,{protocolVersion:m.params?.protocolVersion||'2025-06-18',capabilities:{tools:{}},serverInfo});if(m.method==='tools/list')return reply(m.id,{tools});if(m.method==='tools/call'){const n=m.params?.name;if(n==='describe_deployer')return reply(m.id,{content:[{type:'text',text:JSON.stringify({name:connector.name,searchSpace:connector.searchSpace,focus:connector.focus,stage:connector.stage,version:connector.version||serverInfo.version})}]});if(n==='orchestrate_response'){const r=String(m.params?.arguments?.response??'');let out=r;if(typeof connector.orchestrate==='function')out=await connector.orchestrate(r);return reply(m.id,{content:[{type:'text',text:String(out)}]});}return reply(m.id,{isError:true,content:[{type:'text',text:'Unknown tool: '+n}]});}}
+createInterface({input:process.stdin,crlfDelay:Infinity}).on('line',line=>{try{const m=JSON.parse(line);if(m.method==='notifications/initialized'||m.method?.startsWith('notifications/'))return;Promise.resolve(handle(m)).catch(e=>m.id!=null&&reply(m.id,{isError:true,content:[{type:'text',text:e.message}]}));}catch(e){}});
+`}
+async function deployGenericConnector(){
+  const c=config();
+  if(!c.registryName.startsWith('io.github.')){ $('status').textContent='Connect GitHub first'; $('output').textContent='Use “Connect GitHub → MCP Registry” so the server name is placed in your authenticated io.github.<username>/... namespace.'; return;}
+  if(!window.mcpRegistryAuthenticated){debugLog('warn','Deploy requested without Registry session',{action:'starting Registry login automatically'});$('output').textContent='Registry login is required for publishing. Starting the login flow now…';await connectRegistry();return;}
+  if(!c.npmToken){debugLog('warn','Deploy requested without npm credential',{action:'starting npm connection'});$('output').textContent='npm authentication is required to publish the generated package. Starting npm connection now…';await connectNpm();return;}
+  if(c.packageName && !/^@[a-z0-9._~-]+\/[a-z0-9._~-]+$/i.test(c.packageName))throw new Error('Use a scoped npm package name, for example @yourusername/mcp-focus-weaver.');
+  $('status').textContent='Building generic MCP package…';
+  try{
+    const packageJson={name:c.packageName,version:c.version,description:`Generic MCP self-deployer for ${c.searchSpace}`,type:'module',main:'server.mjs',bin:{[c.packageName.split('/').pop()]:'server.mjs'},license:'MIT',mcpName:c.registryName,engines:{node:'>=20'},publishConfig:{access:'public'}};
+    const readme=readmeText()+`\n\nThis package was generated from the visible connector editor.\nSearch space: ${c.searchSpace}\nFocus: ${c.focus}\nDeployer: ${c.deployer}\n`;
+    const npm=await publishNpmPackage(c.packageName,c.version,packageJson,c.code,readme);
+    $('packageName').value=npm.package;
+    const m=manifest(npm.package);renderManifest();
+    $('status').textContent='Package published · publishing MCP Registry metadata…';
+    const base=serviceBase();
+    if(!base) throw new Error('Open the hosted app to publish to the MCP Registry. The standalone file cannot safely complete authenticated cross-origin publication.');
+    const r=await fetch(base+'/api/registryPublish',{method:'POST',headers:{accept:'application/json','content-type':'application/json'},body:JSON.stringify({sessionId:window.mcpRegistrySession,manifest:m})});
+    const outer=await r.json();
+    const fake={ok:Boolean(outer.ok),status:Number(outer.status||r.status),statusText:outer.statusText||r.statusText,headers:{get:()=>outer.contentType||'application/json'}};
+    showRegistryResponse(fake,outer.body||outer);
+    if(!r.ok||!outer.ok)throw new Error((outer.body&&(outer.body.error||outer.body.message))||outer.error||`Registry publish failed: HTTP ${outer.status||r.status}`);
+    const d=outer.body||{};
+    $('status').textContent='Deployed to npm + MCP Registry';
+    $('output').textContent=`Deployment complete.\n\nNPM package: ${npm.package}@${npm.version}\nTarball: ${npm.tarball}\nMCP Registry name: ${c.registryName}\nSearch space: ${c.searchSpace}\nFocus: ${c.focus}\n\nRegistry response:\n${JSON.stringify(d,null,2)}`;
+    saveDeployment();
+  }catch(e){$('status').textContent='Deployment failed';$('output').textContent=e.message+`\n\nNothing is stored in localStorage except non-secret deployment configuration.`}
+}
+
+async function findPeers(){
+  const wantedSpace=$('space').value.trim().toLowerCase();const wantedFocus=$('peerFocus').value.trim().toLowerCase();$('status').textContent='Searching Registry…';debugLog('info','peer discovery clicked',{searchSpace:wantedSpace,focus:wantedFocus});
+  const base=serviceBase();
+  try{
+    let data;
+    if(base){
+      const qs=new URLSearchParams({searchSpace:wantedSpace,focus:wantedFocus});const r=await fetch(base+'/api/peers?'+qs.toString(),{headers:{accept:'application/json'},cache:'no-store'});data=await r.json().catch(()=>({}));showHttpDebug('Registry peer discovery',r,data);if(!r.ok)throw new Error(data.error||`HTTP ${r.status}`);debugLog('ok','peer discovery completed',{count:data.count||0});
+    }else{
+      const url=$('registry').value.trim();const u=new URL(url);u.searchParams.set('search',wantedSpace);const r=await fetch(u.toString(),{headers:{Accept:'application/json'},cache:'no-store'});data=await r.json();showHttpDebug('Registry public discovery',r,data);if(!r.ok)throw new Error('HTTP '+r.status);data.servers=(data.servers||[]).filter(x=>{const raw=JSON.stringify(x).toLowerCase();return raw.includes(wantedSpace)&&(wantedFocus?raw.includes(wantedFocus):true)});}
+    const arr=data.servers||[];localStorage.setItem('mcp-peer-cache',JSON.stringify(arr));renderPeers(arr);$('status').textContent=arr.length+' peers found';
+  }catch(e){debugLog('error','peer discovery failed',{message:e.message});$('status').textContent='Registry unavailable';$('peers').innerHTML='<div class="notice warning">Registry discovery failed: '+escapeHtml(e.message)+'. See Connection debug log for the exact request/response.</div>'}}
+
+function loadSavedPeers(){renderPeers(JSON.parse(localStorage.getItem('mcp-peer-cache')||'[]'))}
+function renderPeers(arr){$('peers').innerHTML=arr.length?arr.map(x=>{const s=x.server||x;const meta=JSON.stringify(s);return `<div class="peer"><b>${escapeHtml(s.name||'unnamed')}</b><small>${escapeHtml(s.description||'')}</small><small style="margin-top:5px">${escapeHtml((s.version||''))}</small><button style="margin-top:8px;width:100%" onclick='focusPeer(${JSON.stringify(meta)})'>Use as focus</button></div>`}).join(''):'<div class="notice">No matching public Registry entries were found for this search space.</div>'}
+function focusPeer(raw){const x=JSON.parse(raw);$('peerFocus').value=x.name||x.title||'';$('output').textContent=`Peer selected: ${x.name||'unnamed'}\nRegistry metadata loaded into the page; local deployment remains yours.`}
+function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;',"\"":'&quot;'}[c]))}
+function copyOutput(){navigator.clipboard?.writeText($('output').textContent)}
+function readmeText(){return `MCP Search-Space Deployer — Standalone HTML\n\nOpen index.html directly in a browser. No command is required for the editor.\n\nDeploy flow:\n1. Connect GitHub to obtain a short-lived MCP Registry JWT in memory.\n2. Supply an npm publish token and scoped package name.\n3. Deploy publishes the visible connector code as a real npm MCP package and then publishes package-backed server metadata to the official MCP Registry.\n\nThe official Registry catalogs metadata and references to package registries; it does not host npm artifacts itself. The generated npm package contains a generic stdio MCP runtime plus the visible connector module.\n`}
+$('code').addEventListener('input',()=>{updateLines();renderManifest()});window.addEventListener('load',()=>{load();debugLog('info','application loaded',{protocol:location.protocol,origin:location.origin});setTimeout(checkServices,200);});
+</script>
+</body>
+</html>
